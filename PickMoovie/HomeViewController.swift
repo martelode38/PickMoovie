@@ -16,7 +16,14 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        
+        configTitle()
+        configFilterButton()
+        filterButton.addAction(UIAction {[weak self] _ in
+            self?.showFilters()
+        }, for: .primaryActionTriggered)
+    }
+    
+    private func configTitle(){
         titleLabel.text = "O que vamos assistir hoje?"
         titleLabel.font = .systemFont(ofSize: 22, weight: .bold)
         
@@ -39,7 +46,9 @@ final class HomeViewController: UIViewController {
             equalTo: view.trailingAnchor,
             constant: -10
         ).isActive = true
-        
+    }
+    
+    private func configFilterButton(){
         var configuration = UIButton.Configuration.filled()
         configuration.title = "Selecionar filtros"
         configuration.cornerStyle = .capsule
@@ -58,9 +67,29 @@ final class HomeViewController: UIViewController {
         NSLayoutConstraint.activate([
             filterButton.topAnchor.constraint(
                 equalTo: titleLabel.bottomAnchor,
-                constant: 32
+                constant: 50
             ),
         ])
+        
+        filterButton.leadingAnchor.constraint(
+            equalTo: view.leadingAnchor,
+            constant: 24
+        ).isActive = true
+        
+        filterButton.trailingAnchor.constraint(
+            equalTo: view.trailingAnchor,
+            constant: -24
+        ).isActive = true
+    }
+    
+    private func showFilters() {
+        let filterVC = FilterViewController()
+        
+        if let sheet = filterVC.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.prefersGrabberVisible = true
+        }
+        present(filterVC, animated: true)
     }
 }
 
